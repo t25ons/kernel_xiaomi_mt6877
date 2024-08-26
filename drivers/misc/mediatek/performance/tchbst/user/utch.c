@@ -154,7 +154,6 @@ int notify_touch(int action)
 				perfmgr_clusters, target_freq);
 		if (usrtch_debug)
 			pr_debug("touch down\n");
-		perfmgr_trace_count(1, "touch");
 		touch_event = 1;
 	} else if (touch_event == 1 && action == 3) {
 		disable_touch_boost_timer();
@@ -177,7 +176,6 @@ static void notify_touch_up_timeout(struct work_struct *work)
 
 	update_eas_uclamp_min(EAS_UCLAMP_KIR_TOUCH, CGROUP_TA, 0);
 	update_userlimit_cpu_freq(CPU_KIR_TOUCH, perfmgr_clusters, reset_freq);
-	perfmgr_trace_count(0, "touch");
 	touch_event = 2;
 	if (usrtch_debug)
 		pr_debug("touch timeout\n");

@@ -73,8 +73,6 @@ unsigned long long fpsgo_get_time(void)
 
 uint32_t fpsgo_systrace_mask;
 
-static unsigned long __read_mostly mark_addr;
-
 #define GENERATE_STRING(name, unused) #name
 static const char * const mask_string[] = {
 	FPSGO_SYSTRACE_LIST(GENERATE_STRING)
@@ -82,14 +80,6 @@ static const char * const mask_string[] = {
 
 static int fpsgo_update_tracemark(void)
 {
-	if (mark_addr)
-		return 1;
-
-	mark_addr = kallsyms_lookup_name("tracing_mark_write");
-
-	if (unlikely(!mark_addr))
-		return 0;
-
 	return 1;
 }
 
@@ -119,15 +109,6 @@ void __fpsgo_systrace_c(pid_t pid, unsigned long long bufID,
 		return;
 	else if (unlikely(len == 256))
 		log[255] = '\0';
-
-	if (!bufID) {
-		snprintf(buf2, sizeof(buf2), "C|%d|%s|%d\n", pid, log, val);
-		tracing_mark_write(buf2);
-	} else {
-		snprintf(buf2, sizeof(buf2), "C|%d|%s|%d|0x%llx\n",
-			pid, log, val, bufID);
-		tracing_mark_write(buf2);
-	}
 }
 
 void __fpsgo_systrace_b(pid_t tgid, const char *fmt, ...)
@@ -149,9 +130,6 @@ void __fpsgo_systrace_b(pid_t tgid, const char *fmt, ...)
 		return;
 	else if (unlikely(len == 256))
 		log[255] = '\0';
-
-	snprintf(buf2, sizeof(buf2), "B|%d|%s\n", tgid, log);
-	tracing_mark_write(buf2);
 }
 
 void __fpsgo_systrace_e(void)
@@ -159,9 +137,6 @@ void __fpsgo_systrace_e(void)
 	char buf2[256];
 	if (unlikely(!fpsgo_update_tracemark()))
 		return;
-
-	snprintf(buf2, sizeof(buf2), "E\n");
-	tracing_mark_write(buf2);
 }
 
 void fpsgo_main_trace(const char *fmt, ...)

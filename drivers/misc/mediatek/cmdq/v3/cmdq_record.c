@@ -2702,8 +2702,6 @@ s32 cmdq_task_destroy(struct cmdqRecStruct *handle)
 		return -EINVAL;
 	}
 
-	CMDQ_SYSTRACE_BEGIN("%s\n", __func__);
-
 	CMDQ_MSG("release handle:0x%p pkt:0x%p state:%d exec:%d irq:%llu\n",
 		handle, handle->pkt, handle->state,
 		(s32)atomic_read(&handle->exec), handle->gotIRQ);
@@ -2725,8 +2723,6 @@ s32 cmdq_task_destroy(struct cmdqRecStruct *handle)
 	cmdq_task_release_property(handle);
 
 	kfree(handle);
-
-	CMDQ_SYSTRACE_END();
 
 	return 0;
 }

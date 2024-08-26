@@ -25,11 +25,6 @@
 #include "cpu_ctrl_cfp.h"
 #endif
 
-#ifdef CONFIG_TRACING
-#include <linux/kallsyms.h>
-#include <linux/trace_events.h>
-#endif
-
 #include <linux/io.h>
 
 #define MAX_CLUSTER_COUNT 3
@@ -83,7 +78,6 @@ int update_userlimit_cpu_freq(int kicker, int num_cluster
 			, sizeof(struct ppm_limit_data), GFP_KERNEL);
 	if (!final_freq) {
 		retval = -1;
-		perfmgr_trace_printk("cpu_ctrl", "!final_freq\n");
 		goto ret_update;
 	}
 	if (num_cluster != perfmgr_clusters) {
@@ -91,8 +85,6 @@ int update_userlimit_cpu_freq(int kicker, int num_cluster
 				"num_cluster : %d perfmgr_clusters: %d, doesn't match\n",
 				num_cluster, perfmgr_clusters);
 		retval = -1;
-		perfmgr_trace_printk("cpu_ctrl",
-			"num_cluster != perfmgr_clusters\n");
 		goto ret_update;
 	}
 
@@ -109,7 +101,6 @@ int update_userlimit_cpu_freq(int kicker, int num_cluster
 
 	len += snprintf(msg + len, sizeof(msg) - len, "[%d] ", kicker);
 	if (len < 0) {
-		perfmgr_trace_printk("cpu_ctrl", "return -EIO 1\n");
 		mutex_unlock(&boost_freq);
 		return -EIO;
 	}
@@ -122,7 +113,6 @@ int update_userlimit_cpu_freq(int kicker, int num_cluster
 		len += snprintf(msg + len, sizeof(msg) - len, "(%d)(%d) ",
 		freq_set[kicker][i].min, freq_set[kicker][i].max);
 		if (len < 0) {
-			perfmgr_trace_printk("cpu_ctrl", "return -EIO 2\n");
 			mutex_unlock(&boost_freq);
 			return -EIO;
 		}
@@ -136,7 +126,6 @@ int update_userlimit_cpu_freq(int kicker, int num_cluster
 		len1 += snprintf(msg1 + len1, sizeof(msg1) - len1,
 				"[0x %lx] ", policy_mask[i]);
 		if (len1 < 0) {
-			perfmgr_trace_printk("cpu_ctrl", "return -EIO 3\n");
 			mutex_unlock(&boost_freq);
 			return -EIO;
 		}
@@ -168,7 +157,6 @@ int update_userlimit_cpu_freq(int kicker, int num_cluster
 		len += snprintf(msg + len, sizeof(msg) - len, "{%d}{%d} ",
 				current_freq[i].min, current_freq[i].max);
 		if (len < 0) {
-			perfmgr_trace_printk("cpu_ctrl", "return -EIO 4\n");
 			mutex_unlock(&boost_freq);
 			return -EIO;
 		}
@@ -181,11 +169,6 @@ int update_userlimit_cpu_freq(int kicker, int num_cluster
 	}
 	if (log_enable)
 		pr_debug("%s", msg);
-
-#ifdef CONFIG_TRACING
-	perfmgr_trace_printk("cpu_ctrl", msg);
-#endif
-
 
 #ifdef CONFIG_MTK_CPU_CTRL_CFP
 	if (!cfp_init_ret)

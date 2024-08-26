@@ -192,8 +192,6 @@ static s32 mdp_process_read_request(struct mdp_read_readback *req_user)
 	s32 status = -EINVAL;
 	u32 count, i;
 
-	CMDQ_SYSTRACE_BEGIN("%s\n", __func__);
-
 	do {
 		if (!req_user || !req_user->count ||
 			req_user->count > CMDQ_MAX_DUMP_REG_COUNT) {
@@ -251,8 +249,6 @@ static s32 mdp_process_read_request(struct mdp_read_readback *req_user)
 		if (status < 0)
 			break;
 
-		CMDQ_SYSTRACE_BEGIN("%s_copy_to_user_%u\n", __func__, count);
-
 		cmdqCoreReadWriteAddressBatch(addrs, count, values);
 		cmdq_driver_dump_readback(ids, addrs, count, values);
 
@@ -261,15 +257,11 @@ static s32 mdp_process_read_request(struct mdp_read_readback *req_user)
 			CMDQ_ERR("[READ_PA] fail to copy to user\n");
 			status = -EINVAL;
 		}
-
-		CMDQ_SYSTRACE_END();
 	} while (0);
 
 	kfree(ids);
 	kfree(addrs);
 	kfree(values);
-
-	CMDQ_SYSTRACE_END();
 	return status;
 }
 
@@ -995,10 +987,8 @@ s32 mdp_ioctl_async_wait(unsigned long param)
 		mdp_ion_free_handle(mapping_job->handles[i]);
 
 	kfree(mapping_job);
-	CMDQ_SYSTRACE_BEGIN("%s destroy\n", __func__);
 	/* task now can release */
 	cmdq_task_destroy(handle);
-	CMDQ_SYSTRACE_END();
 
 done:
 	CMDQ_TRACE_FORCE_END();
@@ -1363,15 +1353,11 @@ static long mdp_limit_ioctl(struct file *pf, unsigned int code,
 		break;
 	case CMDQ_IOCTL_ASYNC_EXEC:
 		CMDQ_MSG("ioctl CMDQ_IOCTL_ASYNC_EXEC\n");
-		CMDQ_SYSTRACE_BEGIN("%s_async_exec\n", __func__);
 		status = mdp_ioctl_async_exec(pf, param);
-		CMDQ_SYSTRACE_END();
 		break;
 	case CMDQ_IOCTL_ASYNC_WAIT:
 		CMDQ_MSG("ioctl CMDQ_IOCTL_ASYNC_WAIT\n");
-		CMDQ_SYSTRACE_BEGIN("%s_async_wait\n", __func__);
 		status = mdp_ioctl_async_wait(param);
-		CMDQ_SYSTRACE_END();
 		break;
 	case CMDQ_IOCTL_ALLOC_READBACK_SLOTS:
 		CMDQ_MSG("ioctl CMDQ_IOCTL_ALLOC_READBACK_SLOTS\n");

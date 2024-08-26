@@ -17,11 +17,6 @@
 //#include <mt-plat/mtk_sched.h>
 #include <linux/sched.h>
 
-#ifdef CONFIG_TRACING
-#include <linux/kallsyms.h>
-#include <linux/trace_events.h>
-#endif
-
 /* boost value */
 static struct mutex boost_eas;
 
@@ -99,7 +94,6 @@ int update_eas_uclamp_min(int kicker, int cgroup_idx, int value)
 
 	if (cgroup_idx < 0 || cgroup_idx >= NR_CGROUP) {
 		pr_debug("cgroup_idx:%d, error\n", cgroup_idx);
-		perfmgr_trace_printk("uclamp_min", "cgroup_idx >= NR_CGROUP\n");
 		return -1;
 	}
 
@@ -116,7 +110,6 @@ int update_eas_uclamp_min(int kicker, int cgroup_idx, int value)
 
 	/* ptr return error EIO:I/O error */
 	if (len < 0) {
-		perfmgr_trace_printk("uclamp_min", "return -EIO 1\n");
 		mutex_unlock(&boost_eas);
 		return -EIO;
 	}
@@ -139,7 +132,6 @@ int update_eas_uclamp_min(int kicker, int cgroup_idx, int value)
 
 	/*ptr return error EIO:I/O error */
 	if (len < 0) {
-		perfmgr_trace_printk("uclamp_min", "return -EIO 2\n");
 		mutex_unlock(&boost_eas);
 		return -EIO;
 	}
@@ -148,7 +140,6 @@ int update_eas_uclamp_min(int kicker, int cgroup_idx, int value)
 			uclamp_policy_mask[cgroup_idx]);
 
 	if (len1 < 0) {
-		perfmgr_trace_printk("uclamp_min", "return -EIO 3\n");
 		mutex_unlock(&boost_eas);
 		return -EIO;
 	}
@@ -162,9 +153,6 @@ int update_eas_uclamp_min(int kicker, int cgroup_idx, int value)
 	if (log_enable)
 		pr_debug("%s\n", msg);
 
-#ifdef CONFIG_TRACING
-	perfmgr_trace_printk("eas_ctrl (uclamp)", msg);
-#endif
 	mutex_unlock(&boost_eas);
 
 	return cur_uclamp_min[cgroup_idx];
