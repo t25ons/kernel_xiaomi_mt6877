@@ -1044,9 +1044,6 @@ static int SCP_sensorHub_report_raw_data(struct data_unit_t *data_t)
 	if (raw_enable && data_t->flush_action == DATA_ACTION) {
 		if (data_t->time_stamp > raw_enable_time)
 			err = obj->dispatch_data_cb[sensor_id](data_t, NULL);
-		else
-			pr_info("ac:%d, e:%lld, d:%lld\n", data_t->flush_action,
-				raw_enable_time, data_t->time_stamp);
 	} else if (data_t->flush_action == FLUSH_ACTION) {
 		mutex_lock(&flush_mtx);
 		p_flush_count = &mSensorState[sensor_type].flushCnt;
@@ -1098,9 +1095,6 @@ static int SCP_sensorHub_report_alt_data(struct data_unit_t *data_t)
 	if (alt_enable && data_t->flush_action == DATA_ACTION) {
 		if (data_t->time_stamp > alt_enable_time)
 			err = obj->dispatch_data_cb[alt_id](data_t, NULL);
-		else
-			pr_info("ac:%d, e:%lld, d:%lld\n", data_t->flush_action,
-				alt_enable_time, data_t->time_stamp);
 	} else if (data_t->flush_action == FLUSH_ACTION) {
 		mutex_lock(&flush_mtx);
 		p_flush_count = &mSensorState[alt].flushCnt;
@@ -1244,8 +1238,6 @@ static int sensor_send_dram_info_to_hub(void)
 		}
 		break;
 	}
-	if (retry < total)
-		pr_notice("[sensorHub] %s success\n", __func__);
 	return SCP_SENSOR_HUB_SUCCESS;
 }
 
@@ -1279,7 +1271,6 @@ static int sensor_send_timestamp_to_hub(void)
 	struct SCP_sensorHub_data *obj = obj_data;
 
 	if (READ_ONCE(rtc_compensation_suspend)) {
-		pr_err("rtc_compensation_suspend suspend,drop time sync\n");
 		return 0;
 	}
 
