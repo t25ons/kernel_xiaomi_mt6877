@@ -134,8 +134,6 @@ int notify_touch(int action)
 		WARN_ON(!mutex_is_locked(&notify_lock));
 		isact = is_fstb_active(active_time);
 
-		perfmgr_trace_count(isact, "isact");
-
 		if ((isact && ktime_to_ms(delta) < time_to_last_touch) ||
 				usrtch_dbg)
 			return ret;
@@ -160,7 +158,6 @@ int notify_touch(int action)
 		update_eas_uclamp_min(EAS_UCLAMP_KIR_TOUCH, CGROUP_TA, 0);
 		update_userlimit_cpu_freq(CPU_KIR_TOUCH,
 			perfmgr_clusters, reset_freq);
-		perfmgr_trace_count(3, "touch");
 		touch_event = 2;
 		if (usrtch_debug)
 			pr_debug("touch timeout\n");
