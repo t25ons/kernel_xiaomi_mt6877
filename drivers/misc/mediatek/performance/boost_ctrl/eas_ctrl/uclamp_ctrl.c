@@ -9,6 +9,7 @@
 #include <linux/seq_file.h>
 #include <linux/string.h>
 #include <linux/uaccess.h>
+#include <linux/slab.h>
 
 #include "boost_ctrl.h"
 #include "eas_ctrl_plat.h"
