@@ -198,7 +198,7 @@ int update_cpu_core_limit(int kicker, int cid, int min, int max)
 		return -1;
 	}
 
-#ifdef CONFIG_TRACING
+#if 0
 	perfmgr_trace_count(kicker,
 		"update_cpu_core_limit_%d_%d_%d_%d", kicker, cid, min, max);
 #endif
@@ -228,7 +228,7 @@ int update_cpu_core_limit(int kicker, int cid, int min, int max)
 		final_max = default_core_set[cid].core_max;
 	if (final_min < 0)
 		final_min = MIN(default_core_set[cid].core_min, final_max);
-#ifdef CONFIG_TRACING
+#if 0
 	perfmgr_trace_count(kicker,
 		"core_ctl_set_limit_cpus_%d_%d_%d", cid, final_min, final_max);
 #endif
@@ -473,7 +473,7 @@ void update_isolation_cpu(int kicker, int enable, int cpu)
 			final = 1;
 	}
 
-#ifdef CONFIG_TRACING
+#if 0
 	perfmgr_trace_count(enable, "cpu_ctrl_isolation_%d_%d", kicker, cpu);
 #endif
 
