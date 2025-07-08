@@ -21,15 +21,15 @@ unsigned long mtk_drm_get_tracing_mark(void)
 	return 0UL;
 }
 
+#if 0
 static void drm_print_trace(const char *tag, int value)
 {
-#if 0
 	preempt_disable();
 	event_trace_printk(mtk_drm_get_tracing_mark(), "C|%d|%s|%d\n",
 		DRM_TRACE_ID, tag, value);
 	preempt_enable();
-#endif
 }
+#endif
 
 void drm_trace_tag_start(const char *tag)
 {
