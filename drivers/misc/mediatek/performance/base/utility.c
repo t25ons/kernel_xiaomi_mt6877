@@ -68,7 +68,7 @@ int check_group_proc_write(int *cgroup, int *data,
 	return 0;
 }
 
-#ifdef CONFIG_TRACING
+#if 0
 static unsigned long __read_mostly tracing_mark_write_addr;
 static inline void __mt_update_tracing_mark_write_addr(void)
 {
