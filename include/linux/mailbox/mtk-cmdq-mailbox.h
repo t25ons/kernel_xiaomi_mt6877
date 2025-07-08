@@ -189,38 +189,11 @@ do { \
 	pr_notice("[cmdq][err] "fmt"\n", ##args)
 
 /* CMDQ FTRACE */
-#define cmdq_trace_begin(fmt, args...) do { \
-	char buf[MAX_INPUT]; \
-	s32 len = snprintf( \
-		buf, sizeof(buf), "B|%d|"fmt"\n", current->tgid, ##args); \
-	if (len >= MAX_INPUT) \
-		buf[MAX_INPUT - 1] = '\n'; \
-	tracing_mark_write(buf); \
-} while (0)
-
-#define cmdq_trace_end() do { \
-	tracing_mark_write("E\n"); \
-} while (0)
-
-#define cmdq_trace_c(fmt, args...) do { \
-	char buf[MAX_INPUT]; \
-	s32 len = snprintf( \
-		buf, sizeof(buf), "C|"fmt, ##args); \
-	if (len >= MAX_INPUT) \
-		buf[MAX_INPUT - 1] = '\n'; \
-	tracing_mark_write(buf); \
-} while (0)
-
-extern int cmdq_trace;
-#define cmdq_trace_ex_begin(fmt, args...) do { \
-	if (cmdq_trace) \
-		cmdq_trace_begin(fmt, ##args); \
-} while (0)
-
-#define cmdq_trace_ex_end(fmt, args...) do { \
-	if (cmdq_trace) \
-		cmdq_trace_end(fmt, ##args); \
-} while (0)
+#define cmdq_trace_begin(fmt, args...) ((void)0)
+#define cmdq_trace_end() ((void)0)
+#define cmdq_trace_c(fmt, args...) ((void)0)
+#define cmdq_trace_ex_begin(fmt, args...) ((void)0)
+#define cmdq_trace_ex_end(fmt, args...) ((void)0)
 
 dma_addr_t cmdq_thread_get_pc(struct cmdq_thread *thread);
 dma_addr_t cmdq_thread_get_end(struct cmdq_thread *thread);
