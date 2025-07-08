@@ -17,50 +17,11 @@ extern int hwc_pid;
 
 /* MTK_DRM FTRACE */
 extern bool g_trace_log;
-#define mtk_drm_trace_begin(fmt, args...) do { \
-	if (g_trace_log) { \
-		preempt_disable(); \
-		event_trace_printk(mtk_drm_get_tracing_mark(), \
-			"B|%d|"fmt"\n", current->tgid, ##args); \
-		preempt_enable();\
-	} \
-} while (0)
-
-#define mtk_drm_trace_end() do { \
-	if (g_trace_log) { \
-		preempt_disable(); \
-		event_trace_printk(mtk_drm_get_tracing_mark(), "E\n"); \
-		preempt_enable(); \
-	} \
-} while (0)
-
-#define mtk_drm_trace_async_begin(fmt, args...) do { \
-		if (g_trace_log) { \
-			preempt_disable(); \
-			event_trace_printk(mtk_drm_get_tracing_mark(), \
-				"S|%d|"fmt"\n", current->tgid, ##args); \
-			preempt_enable();\
-		} \
-	} while (0)
-
-#define mtk_drm_trace_async_end(fmt, args...) do { \
-		if (g_trace_log) { \
-			preempt_disable(); \
-			event_trace_printk(mtk_drm_get_tracing_mark(), \
-				"F|%d|"fmt"\n", current->tgid, ##args); \
-			preempt_enable(); \
-		} \
-	} while (0)
-
-#define mtk_drm_trace_c(fmt, args...) do { \
-	if (g_trace_log) { \
-		preempt_disable(); \
-		event_trace_printk(mtk_drm_get_tracing_mark(), \
-			"C|"fmt"\n", ##args); \
-		preempt_enable();\
-	} \
-} while (0)
-
+#define mtk_drm_trace_begin(fmt, args...) ((void)0)
+#define mtk_drm_trace_end() ((void)0)
+#define mtk_drm_trace_async_begin(fmt, args...) ((void)0)
+#define mtk_drm_trace_async_end(fmt, args...) ((void)0)
+#define mtk_drm_trace_c(fmt, args...) ((void)0)
 unsigned long mtk_drm_get_tracing_mark(void);
 void drm_trace_tag_start(const char *tag);
 void drm_trace_tag_end(const char *tag);
