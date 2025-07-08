@@ -729,7 +729,9 @@ static int __init bus_tracer_init(void)
 		goto register_bus_tracer_err;
 	}
 
+#if IS_ENABLED(CONFIG_MTK_PLAT_SRAM_FLAG)
 	set_sram_flag_timestamp();
+#endif
 
 	return 0;
 
