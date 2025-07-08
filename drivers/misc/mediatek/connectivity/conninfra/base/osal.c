@@ -102,7 +102,6 @@ static unsigned short const crc16_table[256] = {
 
 int ftrace_flag = 1;
 
-static unsigned long __read_mostly mark_addr;
 static unsigned int g_pid;
 /*******************************************************************************
 *                  F U N C T I O N   D E C L A R A T I O N S
