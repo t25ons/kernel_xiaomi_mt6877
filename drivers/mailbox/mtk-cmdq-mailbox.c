@@ -2469,13 +2469,16 @@ EXPORT_SYMBOL(cmdq_event_verify);
 
 void tracing_mark_write(const char *buf)
 {
+#if 0
 	preempt_disable();
 	trace_puts(buf);
 	preempt_enable();
+#endif
 }
 
 unsigned long cmdq_get_tracing_mark(void)
 {
+#if 0
 	static unsigned long __read_mostly tracing_mark_write_addr;
 
 	if (unlikely(tracing_mark_write_addr == 0))
@@ -2483,6 +2486,9 @@ unsigned long cmdq_get_tracing_mark(void)
 			kallsyms_lookup_name("tracing_mark_write");
 
 	return tracing_mark_write_addr;
+#else
+	return 0UL;
+#endif
 }
 
 #if IS_ENABLED(CONFIG_MMPROFILE)
