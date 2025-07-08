@@ -18,44 +18,42 @@
 
 unsigned long mtk_drm_get_tracing_mark(void)
 {
-	static unsigned long addr;
-
-	if (unlikely(addr == 0))
-		addr = kallsyms_lookup_name("tracing_mark_write");
-
-	return addr;
+	return 0UL;
 }
 
 static void drm_print_trace(const char *tag, int value)
 {
+#if 0
 	preempt_disable();
 	event_trace_printk(mtk_drm_get_tracing_mark(), "C|%d|%s|%d\n",
 		DRM_TRACE_ID, tag, value);
 	preempt_enable();
+#endif
 }
 
 void drm_trace_tag_start(const char *tag)
 {
-	drm_print_trace(tag, 1);
 }
 
 void drm_trace_tag_end(const char *tag)
 {
-	drm_print_trace(tag, 0);
 }
 
 void drm_trace_tag_mark(const char *tag)
 {
+#if 0
 	preempt_disable();
 	event_trace_printk(mtk_drm_get_tracing_mark(), "C|%d|%s|%d\n",
 		DRM_TRACE_ID, tag, 1);
 	event_trace_printk(mtk_drm_get_tracing_mark(), "C|%d|%s|%d\n",
 		DRM_TRACE_ID, tag, 0);
 	preempt_enable();
+#endif
 }
 
 void mtk_drm_refresh_tag_start(struct mtk_ddp_comp *ddp_comp)
 {
+#if 0
 	int crtc_idx;
 	struct mtk_drm_crtc *mtk_crtc = ddp_comp->mtk_crtc;
 
@@ -66,10 +64,12 @@ void mtk_drm_refresh_tag_start(struct mtk_ddp_comp *ddp_comp)
 
 	mtk_drm_trace_c("%d|DISP:CRTC-%d-Refresh|%d",
 		hwc_pid, crtc_idx, 1);
+#endif
 }
 
 void mtk_drm_refresh_tag_end(struct mtk_ddp_comp *ddp_comp)
 {
+#if 0
 	int crtc_idx;
 	struct mtk_drm_crtc *mtk_crtc = ddp_comp->mtk_crtc;
 
@@ -80,6 +80,7 @@ void mtk_drm_refresh_tag_end(struct mtk_ddp_comp *ddp_comp)
 
 	mtk_drm_trace_c("%d|DISP:CRTC-%d-Refresh|%d",
 		hwc_pid, crtc_idx, 0);
+#endif
 }
 
 #ifdef DRM_MMPATH
