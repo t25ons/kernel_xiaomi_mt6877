@@ -198,8 +198,10 @@ int update_cpu_core_limit(int kicker, int cid, int min, int max)
 		return -1;
 	}
 
+#ifdef CONFIG_TRACING
 	perfmgr_trace_count(kicker,
 		"update_cpu_core_limit_%d_%d_%d_%d", kicker, cid, min, max);
+#endif
 	mutex_lock(&boost_freq);
 
 	core_set[kicker][cid].core_min = min;
@@ -226,8 +228,10 @@ int update_cpu_core_limit(int kicker, int cid, int min, int max)
 		final_max = default_core_set[cid].core_max;
 	if (final_min < 0)
 		final_min = MIN(default_core_set[cid].core_min, final_max);
+#ifdef CONFIG_TRACING
 	perfmgr_trace_count(kicker,
 		"core_ctl_set_limit_cpus_%d_%d_%d", cid, final_min, final_max);
+#endif
 	core_ctl_set_limit_cpus(cid, final_min, final_max);
 	mutex_unlock(&boost_freq);
 
